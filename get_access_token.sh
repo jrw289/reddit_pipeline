@@ -1,0 +1,1 @@
+curl -X POST https://www.reddit.com/api/v1/access_token -d "grant_type=client_credentials" -u xSUq5u8QfBknJxIbgIpm0Q:NdcnfYb0yU8yL5RedxgbEbjgYTKR_Q -H "User-Agent: Fuck Reddit devs" | jq -r '.access_token' > at.txt
