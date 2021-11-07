@@ -3,11 +3,20 @@
 import reddit_requests
 import pandas as pd
 
-# Make the call
-bd_resp = reddit_requests.get_posts('bigdata')
 
-# Getting the data into a useful df
-bd_temp_df = pd.DataFrame(bd_resp.json()['data']['children'])
-bd_df = pd.json_normalize(bd_temp_df['data'])
+# Function to pandas-ify the returned Reddit data 
+# Must pass valid JSON
+def pd_data( json_data):
 
-print(bd_df)
+    # Getting the data into a useful df
+    bd_temp_df = pd.DataFrame(json_data['data']['children'])
+    bd_df = pd.json_normalize(bd_temp_df['data'], max_level=0)
+
+    return bd_df
+
+
+if __name__ == "__main__":
+
+    # Make the call
+    bd_resp = reddit_requests.get_posts('bigdata').json()
+    print( pd_data(bd_resp) )
