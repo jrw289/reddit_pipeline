@@ -1,6 +1,6 @@
 #!/home/jake/anaconda3/envs/jake_env/bin/python3
 
-import reddit_requests
+import reqs
 import pandas as pd
 
 
@@ -16,7 +16,7 @@ def pd_data( json_data):
 
 
 if __name__ == "__main__":
-
+    
     # Make the call
-    bd_resp = reddit_requests.get_posts('bigdata').json()
+    bd_resp = reqs.get_posts('bigdata').json()
     print( pd_data(bd_resp) )
