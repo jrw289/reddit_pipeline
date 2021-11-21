@@ -35,9 +35,9 @@ def reload():
     #   specified by a config file on disk
     conn_string   = 'postgresql://python:python@localhost:5432/postgres'
     workdir       = "/home/jake/python_workdir/apis/reddit/workdir/"
-    temp_table_name  = 'temp_2'
-    final_table_name = 'test_2'
-    initial_load     = True  #set to 1 if final_table_name doesn't exist yet
+    temp_table_name  = 'temp'
+    final_table_name = 'test'
+    initial_load     = False  #set to 1 if final_table_name doesn't exist yet
 
 
     # List of the columns to keep from reddit data 
