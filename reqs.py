@@ -8,7 +8,9 @@ import json
 # Make sure the token is still valid or the response will be in HTML
 
 # Adding the access_token to the header
-token_file = open("at.txt","r")
+# NOTE: Below is bad form, but was temporarily done for simplicity
+#token_file = open("at.txt","r")
+token_file = open("/home/jake/python_workdir/apis/reddit/at.txt","r")
 auth_head = "Bearer " + token_file.readline().replace('\n','')
 
 headers = {"Authorization": auth_head,
