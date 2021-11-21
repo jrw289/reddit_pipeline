@@ -77,17 +77,28 @@ def load():
 
     print("Load: Starting Upsert process...")
     try:
-        # Delete all existing rows in the final table that
+        # Update test rows if changed
+        update_str = f"Update {final_table_name} as A SET selftext = temp.selftext, upvote_ratio = temp.upvote_ratio, ups = temp.ups, score = temp.score, num_comments = temp.num_comments, url = temp.url FROM {temp_table_name} as temp WHERE temp.title = A.title and temp.author_fullname = A.author_fullname"
+        engine.execute(update_str)
+        
+        
+        # Delete all existing rows in the temp table that
         #   match on 'title' and 'author_fullname'
         delete_str = f'delete from {final_table_name} where ({final_table_name}.title, {final_table_name}.author_fullname) in (select A.title, A.author_fullname from {final_table_name} as A inner join {temp_table_name} as B on A.title = B.title and A.author_fullname = B.author_fullname)'
         #print(delete_str)
         engine.execute(delete_str) # 2)
+        
+        # Insert all remaining rows into the final table 
         engine.execute(f'INSERT INTO {final_table_name} (SELECT * from {temp_table_name})') # 3)
+        
+        # Delete all the values in the temp table 
+        engine.execute(f'DELETE FROM {temp_table_name}')
+
+        # Commit the transaction 
         transaction.commit()
         print("Load: Upsert successful")
 
-        engine.execute(f'DROP TABLE {temp_table_name}')
-        print(f'Load: Dropped {temp_table_name}')
+
 
     except:
         transaction.rollback()
