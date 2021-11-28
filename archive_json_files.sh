@@ -1,6 +1,6 @@
 #!/bin/bash
 
-work_dir=/home/jake/python_workdir/apis/reddit/workdir
-archive_dir=/home/jake/python_workdir/apis/reddit/workdir/archive
+workdir=$1
+archdir=$2
 
-mv $work_dir/*.json $archive_dir 
+mv $workdir/*.json $archdir 

@@ -31,9 +31,9 @@ def get_subreddits_list(file_path):
 
 # Makes a requests call to the subreddit and converts the
 #  response JSON into a string that is human-readable
-def request_subbreddit_data(subreddit):
+def request_subbreddit_data(subreddit,token_path):
     try:
-        request  = reqs.get_posts(subreddit)
+        request  = reqs.get_posts(subreddit, token_path)
         resp     = request.json()
         output   = json.dumps(resp, indent=1)
         return output
@@ -54,13 +54,10 @@ def save_json_file(file_name, data):
 
 
 # Main function called in Airflow 
-def extract():
+def extract(sr_path, workdir, token_path):
     
-    # CONFIG VALUES
-    # In the future, these can be 
-    #   specified by a config file on disk
-    sr_path = "/home/jake/python_workdir/apis/reddit/subreddits.txt"
-    js_path = "/home/jake/python_workdir/apis/reddit/workdir/"
+    #sr_path = "/home/jake/python_workdir/apis/reddit/subreddits.txt"
+    #workdir = "/home/jake/python_workdir/apis/reddit/workdir/"
     
     # Pull the subreddits to call
     subreddits_list = get_subreddits_list(sr_path)
@@ -69,9 +66,9 @@ def extract():
     # Save each request as a landed JSON file 
     for sub in subreddits_list:
         
-        sub_data = request_subbreddit_data(sub)
+        sub_data = request_subbreddit_data(sub, token_path)
         
-        temp_name = js_path + sub + "_" \
+        temp_name = workdir + sub + "_" \
                     + datetime.now().strftime('%Y-%m-%d_%H%M%S') + \
                     '.json'
                     

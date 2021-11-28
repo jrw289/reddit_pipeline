@@ -23,15 +23,15 @@ def pd_data( json_data):
     return bd_df
 
 
-def load():
+def load(conn_string, workdir, temp_table_name, final_table_name):
 
     # CONFIG VALUES
     # In the future, these can be 
     #   specified by a config file on disk
-    conn_string   = 'postgresql://python:python@localhost:5432/postgres'
-    workdir       = "/home/jake/python_workdir/apis/reddit/workdir/"
-    temp_table_name  = 'temp'
-    final_table_name = 'test'
+    #conn_string   = 'postgresql://python:python@localhost:5432/postgres'
+    #workdir       = "/home/jake/python_workdir/apis/reddit/workdir/"
+    #temp_table_name  = 'temp'
+    #final_table_name = 'test'
 
 
     # List of the columns to keep from reddit data 
@@ -99,6 +99,7 @@ def load():
                 engine.execute(f'INSERT INTO {final_table_name} (SELECT * from {temp_table_name})') # 3)
         
                 # Delete all the values in the temp table 
+                print("Should be about to delete table values...")
                 engine.execute(f'DELETE FROM {temp_table_name}')
 
                 # Commit the transaction 
