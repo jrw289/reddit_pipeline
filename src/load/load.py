@@ -29,7 +29,7 @@ def load(conn_string, workdir, temp_table_name, final_table_name):
     # In the future, these can be 
     #   specified by a config file on disk
     #conn_string   = 'postgresql://python:python@localhost:5432/postgres'
-    #workdir       = "/home/jake/python_workdir/apis/reddit/workdir/"
+    #workdir       = "/home/jake/python_workdir/apis/reddit/src/workdir/"
     #temp_table_name  = 'temp'
     #final_table_name = 'test'
 
@@ -38,9 +38,9 @@ def load(conn_string, workdir, temp_table_name, final_table_name):
     # psycopg2 cannot handle dictionaries apparently,
     col_list = ['subreddit', 'selftext', 'author_fullname', 'title', 'name', 'upvote_ratio', 'ups', 'score', 'author', 'num_comments', 'permalink', 'url']
 
-    # Initialize the DataFrame
+    # Initialize Df and engine
     tot_df = pd.DataFrame()
-
+    engine = sqlalchemy.create_engine(conn_string)
 
     # Find the paths for all the JSON files in workdir
     json_files = [ (workdir + x) for x in listdir(workdir) if ".json" in x]
@@ -77,7 +77,7 @@ def load(conn_string, workdir, temp_table_name, final_table_name):
     # Connect to the database
     # Credit for this connection method:
     # https://towardsdatascience.com/upload-your-pandas-dataframe-to-your-database-10x-faster-eb6dc6609ddf
-            engine = sqlalchemy.create_engine(conn_string)
+
             tot_df.to_sql(temp_table_name, engine, index=False, if_exists='replace') #1)
             connection = engine.connect()
             transaction = connection.begin()

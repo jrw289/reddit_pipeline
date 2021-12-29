@@ -1,0 +1,10 @@
+# Exclude security-related files
+*.json
+*.sql
+gh_access_token
+reddit_api_notes
+*/at.txt
+src/config/config.json
+old_files/*
+src/workdir/*
+__pycache__*

@@ -34,9 +34,9 @@ def reload():
     # In the future, these can be 
     #   specified by a config file on disk
     conn_string   = 'postgresql://python:python@localhost:5432/postgres'
-    workdir       = "/home/jake/python_workdir/apis/reddit/workdir/"
-    temp_table_name  = 'temp'
-    final_table_name = 'test'
+    workdir       = "/home/jake/pydir/apis/reddit/src/workdir/archive/"
+    temp_table_name  = 'reddit_temp'
+    final_table_name = 'reddit'
     initial_load     = False  #set to 1 if final_table_name doesn't exist yet
 
 
@@ -56,9 +56,14 @@ def reload():
     num_json_files = len(json_files)
     print(f"Number of JSON files: {num_json_files}")
     
+    
+    engine = sqlalchemy.create_engine(conn_string)
+    
+    
     # Read files one-by-one into the desired table 
     for count, j_file in enumerate(json_files):
-        print(f"Opening file {count} of {num_json_files}")
+        if count % 50 == 0:
+            print(f"Opening file {count} of {num_json_files}")
         with open(j_file,'r') as resp:
             j_resp = json.loads(resp.read())
             df     = pd_data(j_resp)               
@@ -82,7 +87,9 @@ def reload():
             # Connect to the database
             # Credit for this connection method:
                 # https://towardsdatascience.com/upload-your-pandas-dataframe-to-your-database-10x-faster-eb6dc6609ddf
-            engine = sqlalchemy.create_engine(conn_string)
+            # Useful context:
+                # https://stackoverflow.com/questions/34322471/sqlalchemy-engine-connection-and-session-difference
+            #engine = sqlalchemy.create_engine(conn_string)
             tot_df.to_sql(temp_table_name, engine, index=False, if_exists='replace') #1)
             
             # Create final_table_name on first pass if needed
@@ -109,7 +116,7 @@ def reload():
                 # Insert remaining temp table rows 
                 insert_str = f'INSERT INTO {final_table_name} (SELECT * from {temp_table_name})'
                 engine.execute(insert_str) # 3)
-                engine.execute(f'DELETE FROM {temp_table_name}')                
+                engine.execute(f'TRUNCATE TABLE {temp_table_name}')                
                 transaction.commit()
                 #print("Load: Upsert successful")
 

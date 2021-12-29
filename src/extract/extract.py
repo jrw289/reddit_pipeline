@@ -1,10 +1,10 @@
-#!/home/jake/anaconda3/envs/jake_env/bin/python3
+#!/usr/bin/python3
 
 # EXTRACT 
 # The purpose of this script is to call a list of subreddits,
 #  convert that data to json, then save the data to a JSON file
 
-import reqs
+import extract.reqs as reqs
 import json
 from datetime import datetime
 
@@ -56,8 +56,8 @@ def save_json_file(file_name, data):
 # Main function called in Airflow 
 def extract(sr_path, workdir, token_path):
     
-    #sr_path = "/home/jake/python_workdir/apis/reddit/subreddits.txt"
-    #workdir = "/home/jake/python_workdir/apis/reddit/workdir/"
+    #sr_path = "/home/jake/pydir/apis/reddit/subreddits.txt"
+    #workdir = "/home/jake/pydir/apis/reddit/workdir/"
     
     # Pull the subreddits to call
     subreddits_list = get_subreddits_list(sr_path)

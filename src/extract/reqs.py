@@ -1,4 +1,4 @@
-#!/home/jake/anaconda3/envs/jake_env/bin/python3
+#!/usr/bin/env python3
 
 import sys
 import requests 
@@ -9,7 +9,6 @@ import json
 
 # Adding the access_token to the header
 # NOTE: Below is bad form, but was temporarily done for simplicity
-#token_file = open("at.txt","r")
 
 def make_headers(token_path):
     try:
